@@ -502,7 +502,7 @@ class OAIAPICompatLargeLanguageModel(_CommonOaiApiCompat, LargeLanguageModel):
                 if chunk_json:
                     if u := chunk_json.get("usage"):
                         usage = u
-                if not chunk_json or len(chunk_json["choices"]) == 0:
+                if not chunk_json or not chunk_json.get("choices") or len(chunk_json["choices"]) == 0:
                     continue
 
                 choice = chunk_json["choices"][0]
