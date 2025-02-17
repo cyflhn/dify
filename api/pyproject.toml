@@ -1,3 +1,8 @@
+[[tool.poetry.source]]
+name = "mirrors"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+priority = "primary"
+
 [project]
 name = "dify-api"
 requires-python = ">=3.11,<3.13"

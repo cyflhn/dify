@@ -7,9 +7,9 @@ WORKDIR /app/api
 ENV POETRY_VERSION=2.0.1
 
 # if you located in China, you can use aliyun mirror to speed up
-# RUN pip install --no-cache-dir poetry==${POETRY_VERSION} -i https://mirrors.aliyun.com/pypi/simple/
+RUN pip install --no-cache-dir poetry==${POETRY_VERSION} -i https://mirrors.aliyun.com/pypi/simple/
 
-RUN pip install --no-cache-dir poetry==${POETRY_VERSION}
+#RUN pip install --no-cache-dir poetry==${POETRY_VERSION}
 
 # Configure Poetry
 ENV POETRY_CACHE_DIR=/tmp/poetry_cache
@@ -21,13 +21,13 @@ ENV POETRY_REQUESTS_TIMEOUT=15
 FROM base AS packages
 
 # if you located in China, you can use aliyun mirror to speed up
-# RUN sed -i 's@deb.debian.org@mirrors.aliyun.com@g' /etc/apt/sources.list.d/debian.sources
+RUN sed -i 's@deb.debian.org@mirrors.aliyun.com@g' /etc/apt/sources.list.d/debian.sources
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends gcc g++ libc-dev libffi-dev libgmp-dev libmpfr-dev libmpc-dev
 
 # Install Python dependencies
-COPY pyproject.toml poetry.lock ./
+COPY pyproject.toml ./
 RUN poetry install --sync --no-cache --no-root
 
 # production stage
@@ -51,15 +51,15 @@ WORKDIR /app/api
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl nodejs libgmp-dev libmpfr-dev libmpc-dev \
     # if you located in China, you can use aliyun mirror to speed up
-    # && echo "deb http://mirrors.aliyun.com/debian testing main" > /etc/apt/sources.list \
-    && echo "deb http://deb.debian.org/debian testing main" > /etc/apt/sources.list \
+    && echo "deb http://mirrors.aliyun.com/debian testing main" > /etc/apt/sources.list \
+    # && echo "deb http://deb.debian.org/debian testing main" > /etc/apt/sources.list \
     && apt-get update \
     # For Security
     && apt-get install -y --no-install-recommends expat=2.6.4-1 libldap2=2.6.9+dfsg-1 perl=5.40.0-8 libsqlite3-0=3.46.1-1 zlib1g=1:1.3.dfsg+really1.3.1-1+b1 \
     # install a chinese font to support the use of tools like matplotlib
     && apt-get install -y fonts-noto-cjk \
     # install libmagic to support the use of python-magic guess MIMETYPE
-    && apt-get install -y libmagic1 \
+    # && apt-get install -y libmagic1 \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
@@ -69,7 +69,8 @@ COPY --from=packages ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
 
 # Download nltk data
-RUN python -c "import nltk; nltk.download('punkt'); nltk.download('averaged_perceptron_tagger')"
+#RUN python -c "import nltk; nltk.download('punkt'); nltk.download('averaged_perceptron_tagger')"
+ADD nltk_data /root/nltk_data
 
 # Copy source code
 COPY . /app/api/
