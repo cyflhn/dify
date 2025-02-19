@@ -64,7 +64,7 @@ class OAICompatRerankModel(RerankModel):
 
         # TODO: Do we need truncate docs to avoid llama.cpp return error?
 
-        data = {"model": model_name, "query": query, "documents": docs, "top_n": top_n, "return_documents": True}
+        data = {"model": credentials.get("endpoint_model_name"), "query": query, "documents": docs, "top_n": top_n, "return_documents": True}
 
         try:
             response = post(str(URL(url) / "rerank"), headers=headers, data=dumps(data), timeout=60)

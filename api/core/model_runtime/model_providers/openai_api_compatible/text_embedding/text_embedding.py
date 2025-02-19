@@ -93,7 +93,7 @@ class OAICompatEmbeddingModel(_CommonOaiApiCompat, TextEmbeddingModel):
 
         for i in _iter:
             # Prepare the payload for the request
-            payload = {"input": inputs[i : i + max_chunks], "model": model, **extra_model_kwargs}
+            payload = {"input": inputs[i : i + max_chunks], "model": credentials.get("endpoint_model_name"), **extra_model_kwargs}
 
             # Make the request to the OpenAI API
             response = requests.post(endpoint_url, headers=headers, data=json.dumps(payload), timeout=(10, 300))
@@ -146,7 +146,7 @@ class OAICompatEmbeddingModel(_CommonOaiApiCompat, TextEmbeddingModel):
 
             endpoint_url = urljoin(endpoint_url, "embeddings")
 
-            payload = {"input": "ping", "model": model}
+            payload = {"input": "ping", "model": credentials.get("endpoint_model_name")}
             # For nvidia models, the "input_type":"query" need in the payload
             # more to check issue #11193 or NvidiaTextEmbeddingModel
             if model.startswith("nvidia/"):

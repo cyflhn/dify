@@ -120,7 +120,7 @@ class OAIAPICompatLargeLanguageModel(_CommonOaiApiCompat, LargeLanguageModel):
                 endpoint_url += "/"
 
             # prepare the payload for a simple ping to the model
-            data = {"model": model, "max_tokens": 5}
+            data = {"model": credentials.get("endpoint_model_name"), "max_tokens": 5}
 
             completion_type = LLMMode.value_of(credentials["mode"])
 
@@ -347,7 +347,7 @@ class OAIAPICompatLargeLanguageModel(_CommonOaiApiCompat, LargeLanguageModel):
         elif "json_schema" in model_parameters:
             del model_parameters["json_schema"]
 
-        data = {"model": model, "stream": stream, **model_parameters}
+        data = {"model": credentials.get("endpoint_model_name"), "stream": stream, **model_parameters}
 
         completion_type = LLMMode.value_of(credentials["mode"])
 
