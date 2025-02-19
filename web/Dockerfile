@@ -14,7 +14,7 @@ FROM base AS packages
 WORKDIR /app/web
 
 COPY package.json .
-COPY yarn.lock .
+#COPY yarn.lock .
 
 # if you located in China, you can use taobao registry to speed up
 RUN yarn install --frozen-lockfile --registry https://registry.npmmirror.com/
@@ -62,7 +62,6 @@ RUN yarn global add pm2 \
     && mkdir /.pm2 \
     && chown -R 1001:0 /.pm2 /app/web \
     && chmod -R g=u /.pm2 /app/web
-
 
 ARG COMMIT_SHA
 ENV COMMIT_SHA=${COMMIT_SHA}
