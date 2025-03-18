@@ -10,7 +10,6 @@ from controllers.console.app.error import (
     AppUnavailableError,
     CompletionRequestError,
     ConversationCompletedError,
-    InvalidConversationIDError,
     ProviderModelCurrentlyNotSupportError,
     ProviderNotInitializeError,
     ProviderQuotaExceededError,
@@ -61,8 +60,6 @@ class CompletionApi(InstalledAppResource):
             return helper.compact_generate_response(response)
         except services.errors.conversation.ConversationNotExistsError:
             raise NotFound("Conversation Not Exists.")
-        except services.errors.conversation.InvalidConversationIDError:
-            raise InvalidConversationIDError()
         except services.errors.conversation.ConversationCompletedError:
             raise ConversationCompletedError()
         except services.errors.app_model_config.AppModelConfigBrokenError:
@@ -123,8 +120,6 @@ class ChatApi(InstalledAppResource):
             return helper.compact_generate_response(response)
         except services.errors.conversation.ConversationNotExistsError:
             raise NotFound("Conversation Not Exists.")
-        except services.errors.conversation.InvalidConversationIDError:
-            raise InvalidConversationIDError()
         except services.errors.conversation.ConversationCompletedError:
             raise ConversationCompletedError()
         except services.errors.app_model_config.AppModelConfigBrokenError:
